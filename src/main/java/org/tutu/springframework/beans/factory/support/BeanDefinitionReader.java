@@ -13,12 +13,24 @@ public interface BeanDefinitionReader {
 
     ResourceLoader getResourceLoader();
 
+    /**
+     * 通过资源加载Bean信息
+     */
     void loadBeanDefinitions(Resource resource);
 
+    /**
+     * 通过多个资源加载Bean信息
+     */
     void loadBeanDefinitions(Resource... resources);
 
+    /**
+     * 通过某个位置加载Bean信息
+     */
     void loadBeanDefinitions(String location);
 
+    /**
+     * 通过多个位置加载Bean信息
+     */
     void loadBeanDefinitions(String... locations);
 
 

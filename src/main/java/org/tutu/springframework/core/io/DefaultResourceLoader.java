@@ -10,6 +10,12 @@ import java.net.URL;
  */
 public class DefaultResourceLoader implements ResourceLoader{
 
+    /**
+     * 默认资源获取方式
+     * 将三种资源获取的方式进行统一，根据不同的类型选择不同的方式
+     * @param location 资源地址
+     * @return 资源类
+     */
     @Override
     public Resource getResource(String location) {
         Assert.notNull(location, "Location must not be null");

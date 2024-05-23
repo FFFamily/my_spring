@@ -4,6 +4,9 @@ import org.tutu.springframework.core.io.DefaultResourceLoader;
 import org.tutu.springframework.core.io.Resource;
 import org.tutu.springframework.core.io.ResourceLoader;
 
+/**
+ * Bean资源加载抽象类实现
+ */
 public abstract class AbstractBeanDefinitionReader implements BeanDefinitionReader{
     private  BeanDefinitionRegistry registry;
     private ResourceLoader resourceLoader;

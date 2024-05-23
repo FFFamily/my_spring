@@ -9,5 +9,10 @@ public interface ResourceLoader {
      */
     String CLASSPATH_URL_PREFIX = "classpath:";
 
+    /**
+     * 资源获取接口
+     * @param location
+     * @return
+     */
     Resource getResource(String location);
 }

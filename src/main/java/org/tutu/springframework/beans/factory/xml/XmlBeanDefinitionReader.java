@@ -19,6 +19,7 @@ import java.io.InputStream;
 
 /**
  * xml处理bean注册
+ * 也就是说这个类主要是通过访问XML资源来加载Bean信息
  */
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
@@ -39,8 +40,6 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             throw new RuntimeException("IOException parsing XML document from " + resource, e);
         }
     }
-
-
 
     @Override
     public void loadBeanDefinitions(Resource... resources) {
@@ -63,6 +62,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         }
     }
 
+    /**
+     * 加载Bean信息，封装成BeanDefinition，存入Bean的仓库中
+     * @param inputStream 对应XML文件的输入流
+     * @throws ClassNotFoundException
+     */
     private void doLoadBeanDefinitions(InputStream inputStream) throws ClassNotFoundException {
         // 读取xml文件
         Document document = XmlUtil.readXML(inputStream);
@@ -111,7 +115,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             if (getRegistry().containsBeanDefinition(beanName)){
                 throw new RuntimeException("Duplicate beanName[" + beanName + "] is not allowed");
             }
-            // 注册 BeanDefinition
+            // 注册 BeanDefinition 存放到对应的 Registry 中
             getRegistry().registerBeanDefinition(beanName,beanDefinition);
         }
     }
