@@ -22,6 +22,8 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
      */
     public ClassPathXmlApplicationContext(String[] configLocations)  {
         this.configLocations = configLocations;
+        // 调用的 AbstractApplicationContext 中的 refresh，刷新上下文
+        // 这里拿到 config 的路径后就可以进行上下文的构建了
         refresh();
     }
 

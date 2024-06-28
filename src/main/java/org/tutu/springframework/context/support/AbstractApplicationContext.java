@@ -9,6 +9,7 @@ import org.tutu.springframework.core.io.DefaultResourceLoader;
 import java.util.Map;
 
 /**
+ * 应用上下文抽象类实现：注意，是应用。也就是说该类主要是操作上下文，而非真的是上下文
  * AbstractApplicationContext 继承 DefaultResourceLoader 是为了处理 spring.xml 配置资源的加载。
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
@@ -20,10 +21,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
         // 3. 在 Bean 实例化之前，执行 BeanFactoryPostProcessor (Invoke factory processors registered as beans in the context.)
         invokeBeanFactoryPostProcessors(beanFactory);
-
         // 4. BeanPostProcessor 需要提前于其他 Bean 对象实例化之前执行注册操作
         registerBeanPostProcessors(beanFactory);
-
         // 5. 提前实例化单例Bean对象
         beanFactory.preInstantiateSingletons();
     }

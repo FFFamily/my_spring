@@ -1,5 +1,8 @@
 package org.tutu.springframework.beans.factory.config;
 
+/**
+ * 定义扩展的通用顶层通用方法
+ */
 public interface BeanPostProcessor {
 
     /**

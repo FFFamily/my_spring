@@ -2,7 +2,9 @@ package org.tutu.springframework.context.support;
 
 import org.tutu.springframework.beans.factory.ConfigurableListableBeanFactory;
 import org.tutu.springframework.beans.factory.support.DefaultListableBeanFactory;
-
+/**
+ * 获取Bean工厂和加载资源
+ */
 public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext{
     private DefaultListableBeanFactory beanFactory;
 
