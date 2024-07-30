@@ -8,4 +8,14 @@ public interface ConfigurableApplicationContext extends ApplicationContext {
      * 刷新上下文
      */
     void refresh();
+
+    /**
+     * 注册虚拟机钩子
+     */
+    void registerShutdownHook();
+
+    /**
+     * 手动执行关闭方法
+     */
+    void close();
 }

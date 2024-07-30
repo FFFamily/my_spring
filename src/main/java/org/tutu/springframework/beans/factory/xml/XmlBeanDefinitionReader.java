@@ -75,10 +75,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         NodeList childNodes = root.getChildNodes();
         // 遍历解析
         for (int i = 0; i < childNodes.getLength(); i++) {
-            if (!(childNodes.item(i) instanceof Element bean)){
+            if (!(childNodes.item(i) instanceof Element)){
                 // 如果子节点不是组件，直接跳过
                 continue;
             }
+            Element bean = (Element) childNodes.item(i);
             if (!("bean".equals(childNodes.item(i).getNodeName()))){
                 // 只解析 bean 节点
                 continue;
@@ -86,6 +87,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String id = bean.getAttribute("id");
             String name = bean.getAttribute("name");
             String className = bean.getAttribute("class");
+            // 读取初始化方法
+            String initMethod = bean.getAttribute("init-method");
+            // 读取销毁方法
+            String destroyMethodName = bean.getAttribute("destroy-method");
             // 获取 Class，方便获取类中的名称
             Class<?> clazz = Class.forName(className);
             // 优先级 id > name
@@ -96,9 +101,15 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             }
             // 定义Bean
             BeanDefinition beanDefinition = new BeanDefinition(clazz);
+            // 将方法配置到 Bean 配置中
+            beanDefinition.setInitMethodName(initMethod);
+            beanDefinition.setDestroyMethodName(destroyMethodName);
             // 属性填充
             for (int j = 0; j < bean.getChildNodes().getLength(); j++) {
-                if (!(bean.getChildNodes().item(j) instanceof Element property)) continue;
+                if (!(bean.getChildNodes().item(j) instanceof Element)) {
+                    continue;
+                }
+                Element property = (Element) bean.getChildNodes().item(j);
                 if (!"property".equals(bean.getChildNodes().item(j).getNodeName())) continue;
                 // 属性名
                 String attrName = property.getAttribute("name");
@@ -112,6 +123,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 PropertyValue propertyValue = new PropertyValue(attrName, value);
                 beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
             }
+
             if (getRegistry().containsBeanDefinition(beanName)){
                 throw new RuntimeException("Duplicate beanName[" + beanName + "] is not allowed");
             }

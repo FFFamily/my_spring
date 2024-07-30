@@ -7,6 +7,7 @@ import org.tutu.springframework.context.ConfigurableApplicationContext;
 import org.tutu.springframework.core.io.DefaultResourceLoader;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * 应用上下文抽象类实现：注意，是应用。也就是说该类主要是操作上下文，而非真的是上下文
@@ -29,15 +30,23 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
         Map<String, BeanFactoryPostProcessor> beanFactoryPostProcessorMap = beanFactory.getBeansOfType(BeanFactoryPostProcessor.class);
-        for (BeanFactoryPostProcessor beanFactoryPostProcessor : beanFactoryPostProcessorMap.values()) {
-            beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+        if (beanFactoryPostProcessorMap == null){
+            System.out.println("没有配置对外扩展执行流程");
+        }else {
+            for (BeanFactoryPostProcessor beanFactoryPostProcessor : beanFactoryPostProcessorMap.values()) {
+                beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+            }
         }
     }
 
     private void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
         Map<String, BeanPostProcessor> beanPostProcessorMap = beanFactory.getBeansOfType(BeanPostProcessor.class);
-        for (BeanPostProcessor beanPostProcessor : beanPostProcessorMap.values()) {
-            beanFactory.addBeanPostProcessor(beanPostProcessor);
+        if (beanPostProcessorMap == null){
+            System.out.println("没有配置针对Bean的前置和后置处理器");
+        }else {
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorMap.values()) {
+                beanFactory.addBeanPostProcessor(beanPostProcessor);
+            }
         }
     }
 
@@ -70,5 +79,19 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     }
 
 
+    /**
+     * TODO 这个是用来做什么呢？
+     */
+    @Override
+    public void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+    }
 
+    /**
+     * TODO BeanFactory 中没有 destroySingletons 方法
+     */
+    @Override
+    public void close() {
+        getBeanFactory().destroySingletons();
+    }
 }

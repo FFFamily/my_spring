@@ -1,6 +1,9 @@
 package org.tutu.springframework.test.bean;
 
-public class UserService {
+import org.tutu.springframework.beans.factory.DisposableBean;
+import org.tutu.springframework.beans.factory.InitializingBean;
+
+public class UserService  implements InitializingBean, DisposableBean {
     private String uId;
     private String company;
     private String location;
@@ -10,4 +13,13 @@ public class UserService {
         return userDao.queryUserName(uId)+", 公司："+company+", 地点"+location;
     }
 
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("执行：UserService.destroy");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("执行：UserService.afterPropertiesSet");
+    }
 }

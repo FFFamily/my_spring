@@ -9,7 +9,10 @@ public class BeanDefinition {
     private Class<?> beanClass;
     // bean的属性信息
     private PropertyValues propertyValues;
-
+    // 初始化方法
+    private String initMethodName;
+    // 销毁方法
+    private String destroyMethodName;
     /**
      * Bean 的实例化是放在BeanDefinition的构造方法中
      * @param beanClass

@@ -3,6 +3,7 @@ package org.tutu.springframework.test;
 import org.junit.Test;
 import org.tutu.springframework.beans.factory.config.BeanDefinition;
 import org.tutu.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.tutu.springframework.context.support.ClassPathXmlApplicationContext;
 import org.tutu.springframework.test.bean.UserService;
 
 public class ApiTest {
@@ -19,6 +20,17 @@ public class ApiTest {
         // 4.第二次获取 bean from Singleton
         UserService userService_singleton = (UserService) beanFactory.getBean("userService");
         userService_singleton.queryUserInfo();
+    }
+
+    @Test
+    public void test_xml() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+        // 2. 获取Bean对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        String result = userService.queryUserInfo();
+        System.out.println("测试结果：" + result);
     }
 
 }

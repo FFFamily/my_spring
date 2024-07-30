@@ -15,25 +15,29 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
     @Override
     public Object getBean(String beanName) {
-        Object bean = getSingleton(beanName);
-        // 判断对象是否被放置在缓存
-        if (bean != null){
-            return bean;
-        }
-        BeanDefinition beanDefinition = getBeanDefinition(beanName);
-        return createBean(beanName,beanDefinition);
-
+        return doGetBean(beanName,null);
     }
 
     @Override
     public <T> T getBean(String name, Class<T> requiredType) {
-        return null;
+        return (T) getBean(name);
     }
 
     @Override
     public Object getBean(String beanName, Object... args) {
-        return null;
+        return doGetBean(beanName,args);
     }
+
+    protected <T> T doGetBean(final String beanName, final Object[] args){
+        Object bean = getSingleton(beanName);
+        // 判断对象是否被放置在缓存
+        if (bean != null){
+            return (T) bean;
+        }
+        BeanDefinition beanDefinition = getBeanDefinition(beanName);
+        return (T) createBean(beanName,beanDefinition,args);
+    }
+
 
     @Override
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
@@ -47,6 +51,6 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     /** 以下为模板方法 */
     protected abstract BeanDefinition getBeanDefinition(String beanName);
-    protected abstract Object createBean(String beanName,BeanDefinition beanDefinition);
+//    protected abstract Object createBean(String beanName,BeanDefinition beanDefinition);
     protected abstract Object createBean(String beanName,BeanDefinition beanDefinition,Object[] args);
 }
