@@ -10,4 +10,9 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
+    <bean id="awareService" name="awareService" class="org.tutu.springframework.test.bean.AwareService">
+
+    </bean>
+
+
 </beans>

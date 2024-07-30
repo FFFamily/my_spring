@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.tutu.springframework.beans.factory.config.BeanDefinition;
 import org.tutu.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.tutu.springframework.context.support.ClassPathXmlApplicationContext;
+import org.tutu.springframework.test.bean.AwareService;
 import org.tutu.springframework.test.bean.UserService;
 
 public class ApiTest {
@@ -31,6 +32,18 @@ public class ApiTest {
         UserService userService = applicationContext.getBean("userService", UserService.class);
         String result = userService.queryUserInfo();
         System.out.println("测试结果：" + result);
+    }
+
+    @Test
+    public void test_demo9() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取Bean对象调用方法
+        AwareService userService = applicationContext.getBean("awareService", AwareService.class);
+        System.out.println("ApplicationContextAware："+userService.getApplicationContext());
+        System.out.println("BeanFactoryAware："+userService.getBeanFactory());
     }
 
 }
