@@ -32,4 +32,8 @@ public interface BeanFactory {
      * @param <T>
      */
      <T> T getBean(String name, Class<T> requiredType);
+
+
+
+
 }

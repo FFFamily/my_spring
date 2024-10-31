@@ -13,6 +13,7 @@
     <bean id="awareService" name="awareService" class="org.tutu.springframework.test.bean.AwareService">
 
     </bean>
+    <bean id="proxyUserDao" class="org.tutu.springframework.test.bean.ProxyBeanFactory"/>
 
 
 </beans>

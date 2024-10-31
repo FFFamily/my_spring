@@ -2,6 +2,7 @@ package org.tutu.springframework.beans.factory.support;
 
 import lombok.Getter;
 import org.tutu.springframework.beans.factory.BeanFactory;
+import org.tutu.springframework.beans.factory.FactoryBean;
 import org.tutu.springframework.beans.factory.config.BeanDefinition;
 import org.tutu.springframework.beans.factory.config.BeanPostProcessor;
 import org.tutu.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * AbstractBeanFactory 集成了
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
     @Getter
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
     /**
@@ -36,13 +37,28 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     }
 
     protected <T> T doGetBean(final String beanName, final Object[] args){
-        Object bean = getSingleton(beanName);
+        Object sharedInstance = getSingleton(beanName);
         // 判断对象是否被放置在缓存
-        if (bean != null){
-            return (T) bean;
+        if (sharedInstance != null){
+            return (T) getObjectForBeanInstance(sharedInstance,beanName);
         }
         BeanDefinition beanDefinition = getBeanDefinition(beanName);
-        return (T) createBean(beanName,beanDefinition,args);
+        Object bean = createBean(beanName, beanDefinition, args);
+        return (T) getObjectForBeanInstance(bean, beanName);
+    }
+
+    private Object getObjectForBeanInstance(Object beanInstance,String beanName){
+        // TODO 为什么这里要加这一层
+        if (!(beanInstance instanceof FactoryBean)){
+            return beanInstance;
+        }
+        Object object = getCachedObjectForFactoryBean(beanName);
+        // 先从缓存中获取
+        if (object == null) {
+            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+            object = getObjectFromFactoryBean(factoryBean, beanName);
+        }
+        return object;
     }
 
     /**
